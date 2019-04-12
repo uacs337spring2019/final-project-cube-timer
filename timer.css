@@ -1,0 +1,12 @@
+body {
+    font-family: sans-serif;
+}
+
+#timer {
+    border: 1px solid black;
+    text-align: center;
+}
+
+#timertext {
+    font-size: 48pt;
+}
