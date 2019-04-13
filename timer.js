@@ -2,15 +2,13 @@
 
 (function everything() {
 
+    /* Timer properties and variables */
     // timer update rate in ms
     const TIMER_UPDATE_INTERVAL = 10;
-
     // the interval that updates the timer
     let timer;
-
     // keeps track of whether timer is running; true is ON, false is OFF
     let timerRunning;
-
     // keeps track of when the timer started
     let timerStart;
 
@@ -30,7 +28,6 @@
                     // turn timer off
                     timerRunning = false;
                     clearInterval(timer);
-
                 }
                 else {
                     // turn timer on
@@ -48,7 +45,6 @@
                         let minutes = Math.floor(delta / 60000);
                         let seconds = Math.floor(delta / 1000) % 60; // % 60 is for second rollover when > 1 minute
                         let ms = Math.floor(delta - (minutes * 60000) - (seconds * 1000));
-
                         
                         /* build string of timer. */
                         let timerString;
