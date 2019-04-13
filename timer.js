@@ -49,13 +49,20 @@
                         let seconds = Math.floor(delta / 1000) % 60; // % 60 is for second rollover when > 1 minute
                         let ms = Math.floor(delta - (minutes * 60000) - (seconds * 1000));
 
+                        
+                        /* build string of timer. */
+                        let timerString;
                         // pad values with zeroes
-                        minutes = minutes.toString().padStart(2, '0');
-                        seconds = seconds.toString().padStart(2, '0');
                         ms = ms.toString().padStart(3, '0');
-
-                        // build string of timer
-                        let timerString = minutes + ":" + seconds + "." + ms;
+                        // When <1 min, exclude minutes 
+                        if (minutes < 1) {
+                            timerString = seconds + "." + ms;
+                        }
+                        else {
+                            minutes = minutes.toString().padStart(2, '0');
+                            seconds = seconds.toString().padStart(2, '0');
+                            timerString = minutes + ":" + seconds + "." + ms;
+                        }
                         document.getElementById("timertext").innerHTML = timerString;
                     }, TIMER_UPDATE_INTERVAL);
                 }
