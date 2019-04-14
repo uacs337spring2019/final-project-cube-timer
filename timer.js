@@ -66,19 +66,30 @@
     class SolveRecord {
 
         /**
+         * Constructs a new instance of a SolveRecord.
          * 
-         * @param {number} time the length of this solve in milliseconds
-         * @param {*} scramble 
+         * @param {Time} time the length of this solve in milliseconds
+         * @param {string} scramble 
          */
         constructor(time, scramble) {
             this.time = time;
             this.scramble = scramble;
         }
 
+        /**
+         * Get the Time object associated with this SolveRecord.
+         * 
+         * @returns {Time} the Time object associated with this SolveRecord
+         */
         get time() {
-            return this.fullname;
+            return this.time;
         }
 
+        /**
+         * Get the scramble associated with this SolveRecord.
+         * 
+         * @returns {string} the scramble associated with this SolveRecord
+         */
         get scramble() {
             return this.scramble;
         }
