@@ -4,7 +4,7 @@
 
     /* Timer properties and variables */
     // timer update rate in ms
-    const TIMER_UPDATE_INTERVAL = 10;
+    const TIMER_UPDATE_INTERVAL = 1000;
     // the interval that updates the timer
     let timer;
     // keeps track of whether timer is running; true is ON, false is OFF
