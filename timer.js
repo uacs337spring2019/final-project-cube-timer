@@ -15,6 +15,7 @@
     /* History */
     let solves = [];
 
+    /* Functions and so on */
     window.onload = function setup() {
 
         /* set timer state to off */
