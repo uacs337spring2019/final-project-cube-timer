@@ -98,7 +98,7 @@
     }
 
     /**
-     * Generates a random scramble, between 16-20 moves in length.
+     * Generates a random scramble, between 16-20 moves in length, inclusive.
      * 
      * Is generated from a random sequence of moves, NOT a random state. Each of
      * the 18 moves (U, D, L, R, F, B, plus their counterclockwise and 2 
