@@ -84,7 +84,7 @@
         newRow.appendChild(newTime);
         newRow.appendChild(scramble);
         /* add row to existing table */
-        let table = document.getElementById("historytable");
+        let table = document.getElementById("historytablebody");
 
         table.appendChild(newRow);
     }

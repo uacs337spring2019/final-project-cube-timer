@@ -7,7 +7,23 @@ table {
     border-collapse: collapse;
 }
 
-th {
+table, th, td {
+    border: 1px solid black;
+}
+
+th.solvenumber {
+    width: 3em;
+}
+
+th.solvetime {
+    width: 7em;
+}
+
+th.solvescramble {
+    width: 20em;
+}
+
+thead {
     font-weight: bold;
 }
 
