@@ -42,7 +42,7 @@
             // turn timer off
             timerRunning = false;
             clearInterval(timer);
-            let solveRecord = new SolveRecord(timerTime, "placeholder")
+            let solveRecord = new SolveRecord(timerTime,generateScramble());
             addSolveRecord(solveRecord);
         }
         else {
@@ -95,6 +95,20 @@
         let table = document.getElementById("historytablebody");
 
         table.appendChild(newRow);
+    }
+
+    /**
+     * Generates a random scramble, between 16-20 moves in length.
+     * 
+     * Is generated from a random sequence of moves, NOT a random state. Each of
+     * the 18 moves (U, D, L, R, F, B, plus their counterclockwise and 2 
+     * variants) has an equal chance of being added to the sequence of moves.
+     * 
+     * @returns {string} a string representing the scramble as a sequence of
+     * moves.
+     */
+    function generateScramble() {
+        return "placeholder: U D2 L' R' L2";
     }
 
     /**
