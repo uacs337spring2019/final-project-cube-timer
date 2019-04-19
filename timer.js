@@ -1,151 +1,7 @@
 "use strict";
 
 (function everything() {
-
-    /* Timer properties and variables */
-    // timer update rate in ms
-    const TIMER_UPDATE_INTERVAL = 10;
-    // the interval that updates the timer
-    let timer;
-    // current time on the timer
-    let timerTime;
-    // keeps track of whether timer is running; true is ON, false is OFF
-    let timerRunning;
-    // keeps track of when the timer started
-    let timerStart;
-
-    /* History */
-    let solves = [];
-
-    /* Functions and so on */
-    window.onload = function setup() {
-
-        /* set timer state to off */
-        timerRunning = false;
-
-        /* Handles spacebar press. */
-        document.body.onkeyup = function(event) {
-            // handles key presses, checks multiple properties for browser compatibility
-            if(event.keyCode === 32 || event.key === 'Spacebar'){
-                toggleTimer();
-            }
-        };
-    }
-
-    /**
-     * Turns the timer on or off. Does not use JS intervals or timeout for
-     * timekeeping; those are not guaranteed to be accurate. Instead uses
-     * JS Date().
-     */
-    function toggleTimer() {
-        if (timerRunning) {
-            // turn timer off
-            timerRunning = false;
-            clearInterval(timer);
-            let solveRecord = new SolveRecord(timerTime,generateScramble());
-            addSolveRecord(solveRecord);
-        }
-        else {
-            // turn timer on
-            timerRunning = true;
-
-            // get current time
-            timerStart = Date.now();
-
-            // set up interval to change timer text
-            timer = setInterval(function() {
-                // delta is ms since timer started
-                let delta = Date.now() - timerStart;
-               
-                timerTime = new Time(delta);
-                
-                document.getElementById("timertext").innerHTML = timerTime.toString();
-            }, TIMER_UPDATE_INTERVAL);
-        }
-    }
-
-    /**
-     * Adds a given SolveRecord to the history, and updates the page to reflect
-     * this in the HTML. This will add the given SolveRecord to the history
-     * table, and update the stats associated with the session.
-     * 
-     * @param {solveRecord} solveRecord the SolveRecord to be added to the solve
-     * history.
-     */
-    function addSolveRecord(solveRecord) {
-        solves.push(solveRecord);
-
-        /* Create new row for history table */
-        let newRow = document.createElement("tr");
-        
-        let number = document.createElement("td");
-        number.innerHTML = solves.length;
-
-        let newTime = document.createElement("td");
-        console.log(solveRecord.time.toString());
-        newTime.innerHTML = solveRecord.time.toString();
-
-        let scramble = document.createElement("td");
-        scramble.innerHTML = solveRecord.scramble;
-
-        newRow.appendChild(number);
-        newRow.appendChild(newTime);
-        newRow.appendChild(scramble);
-        /* add row to existing table */
-        let table = document.getElementById("historytablebody");
-
-        table.appendChild(newRow);
-    }
-
-    /**
-     * Generates a random scramble, between 16-20 moves in length.
-     * 
-     * Is generated from a random sequence of moves, NOT a random state. Each of
-     * the 18 moves (U, D, L, R, F, B, plus their counterclockwise and 2 
-     * variants) has an equal chance of being added to the sequence of moves.
-     * 
-     * @returns {string} a string representing the scramble as a sequence of
-     * moves.
-     */
-    function generateScramble() {
-        return "placeholder: U D2 L' R' L2";
-    }
-
-    /**
-     * A class representing a completed solve. Contains a time and an associated
-     * scramble with the time.
-     */
-    class SolveRecord {
-
-        /**
-         * Constructs a new instance of a SolveRecord.
-         * 
-         * @param {Time} time the length of this solve in milliseconds
-         * @param {string} scramble 
-         */
-        constructor(time, scramble) {
-            this._time = time;
-            this._scramble = scramble;
-        }
-
-        /**
-         * Get the Time object associated with this SolveRecord.
-         * 
-         * @returns {Time} the Time object associated with this SolveRecord
-         */
-        get time() {
-            return this._time;
-        }
-
-        /**
-         * Get the scramble associated with this SolveRecord.
-         * 
-         * @returns {string} the scramble associated with this SolveRecord
-         */
-        get scramble() {
-            return this._scramble;
-        }
-    }
+    /* Classes, because they aren't hoisted */
 
     /**
      * Time represents a length of time with millisecond accuracy. It is used to
@@ -195,4 +51,174 @@
             return timerString;
         }
     }
+
+    /**
+     * An object representing a timer that keeps track of time and can also be
+     * toggled on and off. 
+     */
+    class Timer {
+
+        /**
+         * Creates a new instance of a timer. interval, time, and start are set
+         * to undefined. It will be set to not running by default, and the timer
+         * update interval will be set to update every 10 ms.
+         */
+        constructor() {
+            // timer update rate in ms
+            this.TIMER_UPDATE_INTERVAL = 10;
+            // the interval that updates the timer
+            this.interval = undefined;
+            // current time on the timer
+            this.time = undefined;
+            // keeps track of whether timer is running; true is ON, false is OFF
+            this.running = false;
+            // keeps track of when the timer started
+            this.start = undefined;
+        }
+
+        /**
+         * Turns the timer on or off. Does not use JS intervals or timeout for
+         * timekeeping; those are not guaranteed to be accurate. Instead uses
+         * JS Date().
+         * 
+         * @returns {time} a Time object representing the duration of this
+         * timer, if the call to toggle() turned off the timer. If the timer is
+         * turned on by the call to toggle(), this function returns undefined.
+         */
+        toggle() {
+            if (this.running) {
+                // turn timer off
+                this.running = false;
+                clearInterval(this.interval);
+                return this.time;
+            }
+            else {
+                // turn timer on
+                this.running = true;
+
+                // get current time
+                this.start = Date.now();
+
+                // set up interval to change timer text
+                let currentInstance = this; // this no longer refers to the current instance within the function()
+                this.interval = setInterval(function() {
+                    // delta is ms since timer started
+                    let delta = Date.now() - currentInstance.start;
+                
+                    currentInstance.time = new Time(delta);
+                    
+                    document.getElementById("timertext").innerHTML = currentInstance.time.toString();
+                }, this.TIMER_UPDATE_INTERVAL);
+                return undefined;
+            }
+        }
+    } 
+
+    /**
+     * A class representing a completed solve. Contains a time and an associated
+     * scramble with the time.
+     */
+    class SolveRecord {
+
+        /**
+         * Constructs a new instance of a SolveRecord.
+         * 
+         * @param {Time} time the length of this solve in milliseconds
+         * @param {string} scramble 
+         */
+        constructor(time, scramble) {
+            this._time = time;
+            this._scramble = scramble;
+        }
+
+        /**
+         * Get the Time object associated with this SolveRecord.
+         * 
+         * @returns {Time} the Time object associated with this SolveRecord
+         */
+        get time() {
+            return this._time;
+        }
+
+        /**
+         * Get the scramble associated with this SolveRecord.
+         * 
+         * @returns {string} the scramble associated with this SolveRecord
+         */
+        get scramble() {
+            return this._scramble;
+        }
+    }
+
+    /* Setup and functions and so on */
+
+    let timer = new Timer();
+    let solves = [];
+
+    window.onload = function setup() {
+
+        /* Handles spacebar press. */
+        document.body.onkeyup = function(event) {
+            // handles key presses, checks multiple properties for browser compatibility
+            if(event.keyCode === 32 || event.key === 'Spacebar'){
+                let time = timer.toggle();
+                if (time !== undefined) {
+                    let solveRecord = new SolveRecord(time,generateScramble());
+                    addSolveRecord(solveRecord);
+                }
+            }
+        };
+    }
+
+    /**
+     * Adds a given SolveRecord to the history, and updates the page to reflect
+     * this in the HTML. This will add the given SolveRecord to the history
+     * table, and update the stats associated with the session.
+     * 
+     * @param {solveRecord} solveRecord the SolveRecord to be added to the solve
+     * history.
+     */
+    function addSolveRecord(solveRecord) {
+        solves.push(solveRecord);
+
+        /* Create new row for history table */
+        let newRow = document.createElement("tr");
+        
+        let number = document.createElement("td");
+        number.innerHTML = solves.length;
+
+        let newTime = document.createElement("td");
+        console.log(solveRecord.time.toString());
+        newTime.innerHTML = solveRecord.time.toString();
+
+        let scramble = document.createElement("td");
+        scramble.innerHTML = solveRecord.scramble;
+
+        newRow.appendChild(number);
+        newRow.appendChild(newTime);
+        newRow.appendChild(scramble);
+        /* add row to existing table */
+        let table = document.getElementById("historytablebody");
+
+        table.appendChild(newRow);
+    }
+
+    /**
+     * Generates a random scramble, between 16-20 moves in length.
+     * 
+     * Is generated from a random sequence of moves, NOT a random state. Each of
+     * the 18 moves (U, D, L, R, F, B, plus their counterclockwise and 2 
+     * variants) has an equal chance of being added to the sequence of moves.
+     * 
+     * @returns {string} a string representing the scramble as a sequence of
+     * moves.
+     */
+    function generateScramble() {
+        return "placeholder: U D2 L' R' L2";
+    }
+
+    function updateStats() {
+
+    }
+
 })();

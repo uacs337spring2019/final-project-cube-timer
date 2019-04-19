@@ -16,7 +16,7 @@ body {
     text-align: right;
 }
 
-#statkeys, #statvalues {
+#statkeys, #statvalues, #history {
     width: 50%;
     margin: 1em;
 }
