@@ -2,6 +2,30 @@ body {
     font-family: sans-serif;
 }
 
+#history, #stats {
+    width: 50%;
+}
+
+#info {
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+}
+
+#statkeys {
+    text-align: right;
+}
+
+#statkeys, #statvalues {
+    width: 50%;
+    margin: 1em;
+}
+
+#stats {
+    display: flex;
+    justify-content: center;
+}
+
 #timer {
     border: 1px solid black;
     text-align: center;
