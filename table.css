@@ -1,0 +1,31 @@
+/* table.css handles the CSS for the tables in timer.html
+ *
+ * Styling tables are complicated, so I thought it would be better to have it in 
+ * its own file, so that the styling of the table could be easily separated from
+ * the CSS of the rest of the page.
+ */
+
+table {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th.solvenumber {
+    width: 3em;
+}
+
+th.solvetime {
+    width: 7em;
+}
+
+th.solvescramble {
+    width: 20em;
+}
+
+thead {
+    font-weight: bold;
+}

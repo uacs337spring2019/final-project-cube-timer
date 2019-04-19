@@ -2,31 +2,6 @@ body {
     font-family: sans-serif;
 }
 
-table {
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid black;
-}
-
-th.solvenumber {
-    width: 3em;
-}
-
-th.solvetime {
-    width: 7em;
-}
-
-th.solvescramble {
-    width: 20em;
-}
-
-thead {
-    font-weight: bold;
-}
-
 #timer {
     border: 1px solid black;
     text-align: center;
