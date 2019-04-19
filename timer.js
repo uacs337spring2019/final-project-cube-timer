@@ -16,7 +16,11 @@
          * @param {number} ms the length of this time interval in milliseconds.
          */
         constructor(ms) {
-            this.ms = ms;
+            this._ms = ms;
+        }
+
+        get ms() {
+            return this._ms;
         }
 
         /**
@@ -31,9 +35,9 @@
          */
         toString() {
             // get values of numbers for parts of timer 
-            let minutes = Math.floor(this.ms / 60000);
-            let seconds = Math.floor(this.ms / 1000) % 60; // % 60 is for second rollover when > 1 minute
-            let ms = Math.floor(this.ms - (minutes * 60000) - (seconds * 1000));
+            let minutes = Math.floor(this._ms / 60000);
+            let seconds = Math.floor(this._ms / 1000) % 60; // % 60 is for second rollover when > 1 minute
+            let ms = Math.floor(this._ms - (minutes * 60000) - (seconds * 1000));
             
             /* build string of timer. */
             let timerString;
@@ -188,7 +192,6 @@
         number.innerHTML = solves.length;
 
         let newTime = document.createElement("td");
-        console.log(solveRecord.time.toString());
         newTime.innerHTML = solveRecord.time.toString();
 
         let scramble = document.createElement("td");
@@ -201,6 +204,8 @@
         let table = document.getElementById("historytablebody");
 
         table.appendChild(newRow);
+
+        updateStats();
     }
 
     /**
@@ -217,8 +222,37 @@
         return "placeholder: U D2 L' R' L2";
     }
 
+    /**
+     * Updates the HTML associated with the stat items.
+     */
     function updateStats() {
+        let sortedSolves = solves.sort(function(a, b) {
+            return a.time.ms - b.time.ms;
+        });
 
+        let worstTime = sortedSolves[sortedSolves.length - 1].time.ms;
+        let bestTime = sortedSolves[0].time.ms; 
+
+        let sum = 0;
+        for (let i = 0; i < sortedSolves.length; i++) {
+            sum += sortedSolves[i].time.ms;
+        }
+        let mean = sum / sortedSolves.length;
+
+        let median;
+        if (sortedSolves.length % 2 == 1) {
+           median = sortedSolves[parseInt(sortedSolves.length / 2)].time.ms;
+        }
+        else {
+            let leftMiddle = sortedSolves[parseInt(sortedSolves.length / 2 - 1)].time.ms;
+            let rightMiddle = sortedSolves[parseInt(sortedSolves.length / 2)].time.ms;
+            median = (leftMiddle + rightMiddle) / 2;
+        }
+
+        document.getElementById("mean").innerHTML = new Time(mean);
+        document.getElementById("besttime").innerHTML = new Time(bestTime);
+        document.getElementById("median").innerHTML = new Time(median);
+        document.getElementById("worsttime").innerHTML = new Time(worstTime);
     }
 
 })();
