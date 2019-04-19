@@ -64,6 +64,14 @@
         }
     }
 
+    /**
+     * Adds a given SolveRecord to the history, and updates the page to reflect
+     * this in the HTML. This will add the given SolveRecord to the history
+     * table, and update the stats associated with the session.
+     * 
+     * @param {solveRecord} solveRecord the SolveRecord to be added to the solve
+     * history.
+     */
     function addSolveRecord(solveRecord) {
         solves.push(solveRecord);
 
