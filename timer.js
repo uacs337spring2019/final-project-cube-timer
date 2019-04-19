@@ -4,9 +4,11 @@
 
     /* Timer properties and variables */
     // timer update rate in ms
-    const TIMER_UPDATE_INTERVAL = 1000;
+    const TIMER_UPDATE_INTERVAL = 10;
     // the interval that updates the timer
     let timer;
+    // current time on the timer
+    let timerTime;
     // keeps track of whether timer is running; true is ON, false is OFF
     let timerRunning;
     // keeps track of when the timer started
@@ -40,6 +42,8 @@
             // turn timer off
             timerRunning = false;
             clearInterval(timer);
+            let solveRecord = new SolveRecord(timerTime, "placeholder")
+            addSolveRecord(solveRecord);
         }
         else {
             // turn timer on
@@ -53,11 +57,36 @@
                 // delta is ms since timer started
                 let delta = Date.now() - timerStart;
                
-                let time = new Time(delta);
+                timerTime = new Time(delta);
                 
-                document.getElementById("timertext").innerHTML = time.toString();
+                document.getElementById("timertext").innerHTML = timerTime.toString();
             }, TIMER_UPDATE_INTERVAL);
         }
+    }
+
+    function addSolveRecord(solveRecord) {
+        solves.push(solveRecord);
+
+        /* Create new row for history table */
+        let newRow = document.createElement("tr");
+        
+        let number = document.createElement("td");
+        number.innerHTML = solves.length;
+
+        let newTime = document.createElement("td");
+        console.log(solveRecord.time.toString());
+        newTime.innerHTML = solveRecord.time.toString();
+
+        let scramble = document.createElement("td");
+        scramble.innerHTML = solveRecord.scramble;
+
+        newRow.appendChild(number);
+        newRow.appendChild(newTime);
+        newRow.appendChild(scramble);
+        /* add row to existing table */
+        let table = document.getElementById("historytable");
+
+        table.appendChild(newRow);
     }
 
     /**
@@ -73,8 +102,8 @@
          * @param {string} scramble 
          */
         constructor(time, scramble) {
-            this.time = time;
-            this.scramble = scramble;
+            this._time = time;
+            this._scramble = scramble;
         }
 
         /**
@@ -83,7 +112,7 @@
          * @returns {Time} the Time object associated with this SolveRecord
          */
         get time() {
-            return this.time;
+            return this._time;
         }
 
         /**
@@ -92,7 +121,7 @@
          * @returns {string} the scramble associated with this SolveRecord
          */
         get scramble() {
-            return this.scramble;
+            return this._scramble;
         }
     }
 

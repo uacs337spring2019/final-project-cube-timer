@@ -2,6 +2,15 @@ body {
     font-family: sans-serif;
 }
 
+table {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th {
+    font-weight: bold;
+}
+
 #timer {
     border: 1px solid black;
     text-align: center;
