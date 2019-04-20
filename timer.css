@@ -3,13 +3,13 @@ body {
 }
 
 #history, #stats {
-    width: 50%;
 }
 
 #info {
     border: 1px solid black;
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 #statkeys {
@@ -17,7 +17,6 @@ body {
 }
 
 #statkeys, #statvalues, #history {
-    width: 50%;
     margin: 1em;
 }
 
