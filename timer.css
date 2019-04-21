@@ -2,7 +2,9 @@ body {
     font-family: sans-serif;
 }
 
-#history, #stats {
+#history {
+    height: 200px;
+    overflow-y: scroll;
 }
 
 #info {
