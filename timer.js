@@ -177,6 +177,7 @@
                     let solveRecord = new SolveRecord(time,document.getElementById("shufflePattern").innerHTML);
                     document.getElementById("shufflePattern").innerHTML = generateScramble();
                     addSolveRecord(solveRecord);
+                    console.log(JSON.stringify(solveRecord));
                 }
             }
         };
