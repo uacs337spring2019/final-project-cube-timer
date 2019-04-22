@@ -20,7 +20,7 @@
     /* Functions and so on */
     window.onload = function setup() {
 
-    	document.getElementById("shufflePattern").onclick = generateScramble;
+        document.getElementById("shufflePattern").innerHTML = generateScramble();
 
     	generateScramble();
 
@@ -46,8 +46,11 @@
             // turn timer off
             timerRunning = false;
             clearInterval(timer);
-            let solveRecord = new SolveRecord(timerTime,generateScramble());
+            let solveRecord = new SolveRecord(timerTime,document.getElementById("shufflePattern").innerHTML);
             addSolveRecord(solveRecord);
+
+            /*displays the updated shuffle pattern at the top of the page above timer*/
+            document.getElementById("shufflePattern").innerHTML = generateScramble();
         }
         else {
             // turn timer on
@@ -86,7 +89,6 @@
         number.innerHTML = solves.length;
 
         let newTime = document.createElement("td");
-        console.log(solveRecord.time.toString());
         newTime.innerHTML = solveRecord.time.toString();
 
         let scramble = document.createElement("td");
@@ -113,19 +115,32 @@
      */
     function generateScramble() {
 
-    	let text = "";
-    	/*array with all the different possible shuffle moves*/
-    	let possible = ["F", "U", "R", "B", "L", "D", "F'", "U'", "R'", "B'", "L'", "D'", "F2", "U2", "R2", "B2", "L2", "D2"];
+    	/* array with all the different possible shuffle moves */
+        let possible = ["F", "U", "R", "B", "L", "D", 
+                        "F'", "U'", "R'", "B'", "L'", "D'",
+                        "F2", "U2", "R2", "B2", "L2", "D2"];
 
-    	/*loops through the array choosing moves at random for a 15 move shuffle*/
-    	for(let i = 0; i < 15; i++){
-    		text += " "+possible[Math.floor(Math.random() * possible.length)]; 
-    	}
+        /* loops through the array choosing moves at random for a 16-20 move shuffle */
+        let minMoves = 16; // inclusive 
+        let maxMoves = 20; // inclusive
+        let numMoves = Math.floor(Math.random() * (maxMoves - minMoves + 1)) + minMoves; 
 
-    	/*displays the updated shuffle pattern at the top of the page above timer*/
-    	document.getElementById("shufflePattern").innerHTML = text;
-
-        return text;
+        let moves = [];
+    	for (let i = 0; i < numMoves; i++) {
+            // avoid duplicate moves
+            let newMove;
+            do {
+                newMove = possible[Math.floor(Math.random() * possible.length)]; 
+            }
+            while (moves.length > 0 && newMove === moves[moves.length - 1]);
+            moves.push(newMove);
+        }
+        
+        let scrambleText = "";
+        for (let i = 0; i < moves.length; i++) {
+            scrambleText += moves[i] + ' ';
+        }
+        return scrambleText.trim();
     }
 
     /**
