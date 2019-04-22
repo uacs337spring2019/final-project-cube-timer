@@ -166,13 +166,16 @@
 
     window.onload = function setup() {
 
+        document.getElementById("shufflePattern").innerHTML = generateScramble();
+
         /* Handles spacebar press. */
         document.body.onkeyup = function(event) {
             // handles key presses, checks multiple properties for browser compatibility
             if(event.keyCode === 32 || event.key === 'Spacebar'){
                 let time = timer.toggle();
                 if (time !== undefined) {
-                    let solveRecord = new SolveRecord(time,generateScramble());
+                    let solveRecord = new SolveRecord(time,document.getElementById("shufflePattern").innerHTML);
+                    document.getElementById("shufflePattern").innerHTML = generateScramble();
                     addSolveRecord(solveRecord);
                 }
             }
@@ -230,7 +233,7 @@
     }
 
     /**
-     * Generates a random scramble, between 16-20 moves in length.
+     * Generates a random scramble, between 16-20 moves in length, inclusive.
      * 
      * Is generated from a random sequence of moves, NOT a random state. Each of
      * the 18 moves (U, D, L, R, F, B, plus their counterclockwise and 2 
@@ -240,7 +243,33 @@
      * moves.
      */
     function generateScramble() {
-        return "placeholder: U D2 L' R' L2";
+
+    	/* array with all the different possible shuffle moves */
+        let possible = ["F", "U", "R", "B", "L", "D", 
+                        "F'", "U'", "R'", "B'", "L'", "D'",
+                        "F2", "U2", "R2", "B2", "L2", "D2"];
+
+        /* loops through the array choosing moves at random for a 16-20 move shuffle */
+        let minMoves = 16; // inclusive 
+        let maxMoves = 20; // inclusive
+        let numMoves = Math.floor(Math.random() * (maxMoves - minMoves + 1)) + minMoves; 
+
+        let moves = [];
+    	for (let i = 0; i < numMoves; i++) {
+            // avoid duplicate moves
+            let newMove;
+            do {
+                newMove = possible[Math.floor(Math.random() * possible.length)]; 
+            }
+            while (moves.length > 0 && newMove === moves[moves.length - 1]);
+            moves.push(newMove);
+        }
+        
+        let scrambleText = "";
+        for (let i = 0; i < moves.length; i++) {
+            scrambleText += moves[i] + ' ';
+        }
+        return scrambleText.trim();
     }
 
     /**

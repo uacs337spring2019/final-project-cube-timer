@@ -1,5 +1,6 @@
 body {
     font-family: sans-serif;
+    background-color: #DCDCDC;
 }
 
 #history {
@@ -34,4 +35,15 @@ body {
 
 #timertext {
     font-size: 48pt;
+}
+
+#shufflePattern{
+	font-size: 22pt;
+	font-weight: bold;
+}
+
+#shuffle{
+	margin: auto;
+	padding: 10px;
+	width: 50%;
 }
