@@ -3,6 +3,31 @@ body {
     background-color: #DCDCDC;
 }
 
+#history {
+    height: 200px;
+    overflow-y: scroll;
+}
+
+#info {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#statkeys {
+    text-align: right;
+}
+
+#statkeys, #statvalues, #history {
+    margin: 1em;
+}
+
+#stats {
+    display: flex;
+    justify-content: center;
+}
+
 #timer {
     border: 1px solid black;
     text-align: center;
