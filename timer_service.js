@@ -9,9 +9,6 @@ const jsonParser = bodyParser.json();
 
 app.use(express.static('public'));
 
-// message log filename
-const logFile = "messages.txt";
-
 /* Service helper functions */
 
 /**
@@ -29,28 +26,6 @@ function readFile(file_name) {
 	    console.log("Error reading file " + file_name + ':', e.stack);
 	}
 	return content;
-}
-
-
-/**
- * Reads the messeages stored in the log file and returns it as a JSON string.
- */
-function getMessageLogJSON() {
-    let contents = readFile(logFile);
-    let lines = contents.split('\n');
-
-    let messages = [];
-    // iterate through lines.length-1 because last line is just a newline
-    for (let i = 0; i < lines.length - 1; i++) {
-        let line = lines[i];
-        let tokens = line.split(':::');
-        let messageEntry = {}
-        messageEntry['name'] = tokens[0];
-        messageEntry['message'] = tokens[1];
-        messages.push(messageEntry);
-    }
-
-    return JSON.stringify(messages);
 }
 
 /* Request handling */
