@@ -2,14 +2,16 @@ body {
     font-family: sans-serif;
 }
 
-#history, #stats {
-    width: 50%;
+#history {
+    height: 200px;
+    overflow-y: scroll;
 }
 
 #info {
     border: 1px solid black;
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 #statkeys {
@@ -17,7 +19,6 @@ body {
 }
 
 #statkeys, #statvalues, #history {
-    width: 50%;
     margin: 1em;
 }
 

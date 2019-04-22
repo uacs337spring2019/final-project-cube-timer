@@ -16,7 +16,11 @@
          * @param {number} ms the length of this time interval in milliseconds.
          */
         constructor(ms) {
-            this.ms = ms;
+            this._ms = ms;
+        }
+
+        get ms() {
+            return this._ms;
         }
 
         /**
@@ -31,9 +35,9 @@
          */
         toString() {
             // get values of numbers for parts of timer 
-            let minutes = Math.floor(this.ms / 60000);
-            let seconds = Math.floor(this.ms / 1000) % 60; // % 60 is for second rollover when > 1 minute
-            let ms = Math.floor(this.ms - (minutes * 60000) - (seconds * 1000));
+            let minutes = Math.floor(this._ms / 60000);
+            let seconds = Math.floor(this._ms / 1000) % 60; // % 60 is for second rollover when > 1 minute
+            let ms = Math.floor(this._ms - (minutes * 60000) - (seconds * 1000));
             
             /* build string of timer. */
             let timerString;
@@ -154,6 +158,11 @@
 
     let timer = new Timer();
     let solves = [];
+    let last5 = [];
+    let last12 = [];
+    let last100 = [];
+    let bao5 = new Time(Number.MAX_VALUE);
+    let bao12 = new Time(Number.MAX_VALUE);
 
     window.onload = function setup() {
 
@@ -179,7 +188,23 @@
      * history.
      */
     function addSolveRecord(solveRecord) {
+        /* add solves to history lists */
         solves.push(solveRecord);
+
+        last5.push(solveRecord);
+        if (last5.length > 5) {
+            last5.shift();
+        }
+
+        last12.push(solveRecord);
+        if (last12.length > 12) {
+            last12.shift();
+        }
+
+        last100.push(solveRecord);
+        if (last100.length > 100) {
+            last100.shift();
+        }
 
         /* Create new row for history table */
         let newRow = document.createElement("tr");
@@ -188,7 +213,6 @@
         number.innerHTML = solves.length;
 
         let newTime = document.createElement("td");
-        console.log(solveRecord.time.toString());
         newTime.innerHTML = solveRecord.time.toString();
 
         let scramble = document.createElement("td");
@@ -201,6 +225,8 @@
         let table = document.getElementById("historytablebody");
 
         table.appendChild(newRow);
+
+        updateStats();
     }
 
     /**
@@ -217,8 +243,98 @@
         return "placeholder: U D2 L' R' L2";
     }
 
+    /**
+     * Updates the HTML associated with the stat items.
+     */
     function updateStats() {
+        /* update global stats */
+        // slicing duplicates array, because sorting does so in-place
+        let sortedSolves = solves.slice();
+        sortedSolves.sort(function(a, b) {
+            return a.time.ms - b.time.ms;
+        });
 
+        let worstTime = sortedSolves[sortedSolves.length - 1].time.ms;
+        let bestTime = sortedSolves[0].time.ms; 
+
+        let sum = 0;
+        for (let i = 0; i < sortedSolves.length; i++) {
+            sum += sortedSolves[i].time.ms;
+        }
+        let mean = sum / sortedSolves.length;
+
+        let median;
+        if (sortedSolves.length % 2 == 1) {
+           median = sortedSolves[parseInt(sortedSolves.length / 2)].time.ms;
+        }
+        else {
+            let leftMiddle = sortedSolves[parseInt(sortedSolves.length / 2 - 1)].time.ms;
+            let rightMiddle = sortedSolves[parseInt(sortedSolves.length / 2)].time.ms;
+            median = (leftMiddle + rightMiddle) / 2;
+        }
+
+        document.getElementById("mean").innerHTML = new Time(mean);
+        document.getElementById("besttime").innerHTML = new Time(bestTime);
+        document.getElementById("median").innerHTML = new Time(median);
+        document.getElementById("worsttime").innerHTML = new Time(worstTime);
+
+        /* update running average stats */
+
+        /* Note: running averages are calculated by throwing away the best and
+         * worst times and averaging what remains. Thus, each average is
+         * calculated starting at index 1 to index length - 1.
+         */
+        if (last5.length === 5) {
+            let sortedLast5 = last5.slice();
+            sortedLast5.sort(function(a, b) {
+                return a.time.ms - b.time.ms;
+            });
+            sum = 0;
+            for (let i = 1; i < sortedLast5.length - 1; i++) {
+                sum += sortedLast5[i].time.ms;
+            }
+            let avgLast5 = new Time(sum / (last5.length - 2));
+            
+            document.getElementById("ao5").innerHTML = avgLast5;
+
+            if (avgLast5.ms < bao5.ms) {
+                bao5 = avgLast5;
+                document.getElementById("bo5").innerHTML = bao5;
+            }
+        }
+
+        if (last12.length === 12) {
+            let sortedLast12 = last12.slice();
+            sortedLast12.sort(function(a, b) {
+                return a.time.ms - b.time.ms;
+            });
+            sum = 0;
+            for (let i = 1; i < sortedLast12.length - 1; i++) {
+                sum += sortedLast12[i].time.ms;
+            }
+            let avgLast12 = new Time(sum / (last12.length - 2));
+
+            document.getElementById("ao12").innerHTML = avgLast12;
+
+            if (avgLast12.ms < bao12.ms) {
+                bao12 = avgLast12;
+                document.getElementById("bo12").innerHTML = bao12;
+            }
+        }
+
+        if (last100.length === 100) {
+            let sortedLast100 = last100.slice();
+            sortedLast100.sort(function(a, b) {
+                return a.time.ms - b.time.ms;
+            });
+            sum = 0;
+            for (let i = 1; i < sortedLast100.length - 1; i++) {
+                sum += sortedLast100[i].time.ms;
+            }
+            let avgLast100 = new Time(sum / (last100.length - 2));
+
+            document.getElementById("ao100").innerHTML = avgLast100;
+        }
     }
 
 })();
