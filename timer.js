@@ -20,6 +20,10 @@
     /* Functions and so on */
     window.onload = function setup() {
 
+    	document.getElementById("shufflePattern").onclick = generateScramble;
+
+    	generateScramble();
+
         /* set timer state to off */
         timerRunning = false;
 
@@ -108,7 +112,20 @@
      * moves.
      */
     function generateScramble() {
-        return "placeholder: U D2 L' R' L2";
+
+    	let text = "";
+    	/*array with all the different possible shuffle moves*/
+    	let possible = ["F", "U", "R", "B", "L", "D", "F'", "U'", "R'", "B'", "L'", "D'", "F2", "U2", "R2", "B2", "L2", "D2"];
+
+    	/*loops through the array choosing moves at random for a 15 move shuffle*/
+    	for(let i = 0; i < 15; i++){
+    		text += " "+possible[Math.floor(Math.random() * possible.length)]; 
+    	}
+
+    	/*displays the updated shuffle pattern at the top of the page above timer*/
+    	document.getElementById("shufflePattern").innerHTML = text;
+
+        return text;
     }
 
     /**
