@@ -177,10 +177,45 @@
                     let solveRecord = new SolveRecord(time,document.getElementById("shufflePattern").innerHTML);
                     document.getElementById("shufflePattern").innerHTML = generateScramble();
                     addSolveRecord(solveRecord);
-                    console.log(JSON.stringify(solveRecord));
                 }
             }
         };
+
+        document.getElementById("get").addEventListener("click", function() {
+            let username = document.getElementById("usernametext").value;
+            console.log(username);
+            fetch("http://localhost:3000/?username=" + username.trim())
+                .then(checkStatus)
+                .then(function(responseText) {
+                    solves = JSON.parse(responseText);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        });
+        document.getElementById("store").addEventListener("click", function() {
+            let data = {};
+            data['username'] = document.getElementById("usernametext").value;
+            data['history'] = solves;
+    
+            const fetchOptions = {
+                method : 'POST',
+                headers : {
+                    'Accept': 'application/json', 
+                    'Content-Type': 'application/json', 
+                },
+                body : JSON.stringify(data)
+            };
+            console.log(fetchOptions['body']);
+            fetch("http://localhost:3000", fetchOptions)
+                .then(checkStatus)
+                .then(function(responseText) {
+                    console.log(responseText);
+                }) 
+                .catch(function(error) {
+                    console.log(error);
+                });
+        });
     }
 
     /**
@@ -367,4 +402,16 @@
         }
     }
 
+    /**
+     * Checks the status of the return code given by an Ajax call. It will throw
+     * an error if this response is not in the inclusive range of 200-299.
+     */
+    function checkStatus(response) {
+        if (response.status >= 200 && response.status < 300) {
+            return response.text();
+        }
+        else {
+            return Promise.reject(new Error(response.status+":"+response.statusText));
+        }
+    }
 })();

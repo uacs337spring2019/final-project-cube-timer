@@ -47,17 +47,21 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', jsonParser, function(req, res) {
-    let username = req.body.username;
-    let history = req.body.history;
 
-    fs.appendFile(username + ".txt", history, function (err) {
-        if (err) {
-            res.send("Server encountered an error on saving your history");
-            throw err;
-        }
-        console.log('Saved!');
-        res.send("Successfully saved history");
-    });
+    console.log(req.body.history[0]._time._ms);
+    console.log(req.body.history[0]._scramble);
+    let history = req.body.history;
+    let username = req.body.username;
+
+    for (let i = 0; i < history.length; i++) {
+        let str = req.body.history[i]._time._ms + " " + req.body.history[i]._scramble + '\n';
+        fs.appendFile(username + ".txt", str, function (err) {
+            if (err) {
+                res.send("Server encountered an error on saving your history");
+                throw err;
+            }
+        });
+    }
 });
 
 app.listen(3000);
