@@ -1,0 +1,24 @@
+{
+  "name": "csc337-final-project",
+  "version": "1.0.0",
+  "description": "csc337 final project, by Nick Silvestri and Fernando Gutierrez",
+  "main": "timer_service.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"error no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uacs337spring2019/final-project-space-cowboyz.git"
+  },
+  "author": "Nick Silvestri, Fernando Gutierrez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uacs337spring2019/final-project-space-cowboyz/issues"
+  },
+  "homepage": "https://github.com/uacs337spring2019/final-project-space-cowboyz#readme"
+}
