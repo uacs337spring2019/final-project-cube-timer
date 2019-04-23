@@ -187,7 +187,13 @@
             fetch("http://localhost:3000/?username=" + username.trim())
                 .then(checkStatus)
                 .then(function(responseText) {
-                    solves = JSON.parse(responseText);
+                    console.log(responseText);
+                    let newSolves = JSON.parse(responseText);
+                    for (let i = 0; i < newSolves.length; i++) {
+                        if (typeof parseInt(newSolves[i]._time._ms) === "number") {
+                            addSolveRecord(new SolveRecord(newSolves[i]._time._ms, newSolves[i]._scramble));
+                        }
+                    }
                 })
                 .catch(function(error) {
                     console.log(error);

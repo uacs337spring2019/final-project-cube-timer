@@ -20,12 +20,33 @@ app.use(express.static('public'));
  */
 function readFile(file_name) {
 	let content;
+    let solves = [];
 	try {  
-	    content = fs.readFileSync(file_name, 'utf8');
+        content = fs.readFileSync(file_name, 'utf8');
 	} catch(e) {
 	    console.log("Error reading file " + file_name + ':', e.stack);
-	}
-	return content;
+    }
+
+    let lines = content.split('\n');
+    console.log(lines);
+    for (let i = 0; i < lines.length; i++) {
+        let tokens = lines[i].split(" ");
+        if (tokens.length < 2) continue;
+        let record = {};
+        record['_time'] = {};
+        record['_time']['_ms'] = tokens[0];
+
+        let scramble = "";
+        for (let j = 1; j < tokens.length; j++) {
+            scramble += tokens[j] + " ";
+        }
+        record['_scramble'] = scramble.trim();
+        solves.push(record);
+        console.log(solves);
+    }
+    console.log(solves);
+    console.log(JSON.stringify(solves));
+	return JSON.stringify(solves);
 }
 
 /* Request handling */
@@ -41,15 +62,13 @@ app.use(function(req, res, next) {
 app.get('/', function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
 
-    let name = req.query.username;
+    let username = req.query.username;
 
-    res.send(readFile(name + ".txt"));
+    res.send(readFile(username + ".txt"));
+    console.log("sent data in file " + username + ".txt");
 });
 
 app.post('/', jsonParser, function(req, res) {
-
-    console.log(req.body.history[0]._time._ms);
-    console.log(req.body.history[0]._scramble);
     let history = req.body.history;
     let username = req.body.username;
 
