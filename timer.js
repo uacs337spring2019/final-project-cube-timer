@@ -1,6 +1,5 @@
-"use strict";
-
 (function everything() {
+    'use strict';
     /* Classes, because they aren't hoisted */
 
     /**
@@ -36,7 +35,8 @@
         toString() {
             // get values of numbers for parts of timer 
             let minutes = Math.floor(this._ms / 60000);
-            let seconds = Math.floor(this._ms / 1000) % 60; // % 60 is for second rollover when > 1 minute
+            // % 60 is for second rollover when > 1 minute
+            let seconds = Math.floor(this._ms / 1000) % 60;
             let ms = Math.floor(this._ms - (minutes * 60000) - (seconds * 1000));
             
             /* build string of timer. */
@@ -104,14 +104,16 @@
                 this.start = Date.now();
 
                 // set up interval to change timer text
-                let currentInstance = this; // this no longer refers to the current instance within the function()
+                // this no longer refers to the current instance within the function()
+                let currentInstance = this;
                 this.interval = setInterval(function() {
                     // delta is ms since timer started
                     let delta = Date.now() - currentInstance.start;
                 
                     currentInstance.time = new Time(delta);
                     
-                    document.getElementById("timertext").innerHTML = currentInstance.time.toString();
+                    document.getElementById("timertext").innerHTML = 
+                        currentInstance.time.toString();
                 }, this.TIMER_UPDATE_INTERVAL);
                 return undefined;
             }
@@ -128,7 +130,7 @@
          * Constructs a new instance of a SolveRecord.
          * 
          * @param {Time} time the length of this solve in milliseconds
-         * @param {string} scramble 
+         * @param {string} scramble the scramble associated with this solve
          */
         constructor(time, scramble) {
             this._time = time;
@@ -174,7 +176,8 @@
             if(event.keyCode === 32 || event.key === 'Spacebar'){
                 let time = timer.toggle();
                 if (time !== undefined) {
-                    let solveRecord = new SolveRecord(time,document.getElementById("shufflePattern").innerHTML);
+                    let solveRecord = 
+                        new SolveRecord(time,document.getElementById("shufflePattern").innerHTML);
                     document.getElementById("shufflePattern").innerHTML = generateScramble();
                     addSolveRecord(solveRecord);
                 }
@@ -191,7 +194,8 @@
                     let newSolves = JSON.parse(responseText);
                     for (let i = 0; i < newSolves.length; i++) {
                         if (typeof parseInt(newSolves[i]._time._ms) === "number") {
-                            addSolveRecord(new SolveRecord(newSolves[i]._time._ms, newSolves[i]._scramble));
+                            addSolveRecord(new SolveRecord(newSolves[i]._time._ms, 
+                                newSolves[i]._scramble));
                         }
                     }
                 })
@@ -222,7 +226,7 @@
                     console.log(error);
                 });
         });
-    }
+    };
 
     /**
      * Adds a given SolveRecord to the history, and updates the page to reflect
@@ -286,7 +290,7 @@
      */
     function generateScramble() {
 
-    	/* array with all the different possible shuffle moves */
+        /* array with all the different possible shuffle moves */
         let possible = ["F", "U", "R", "B", "L", "D", 
                         "F'", "U'", "R'", "B'", "L'", "D'",
                         "F2", "U2", "R2", "B2", "L2", "D2"];
@@ -297,7 +301,7 @@
         let numMoves = Math.floor(Math.random() * (maxMoves - minMoves + 1)) + minMoves; 
 
         let moves = [];
-    	for (let i = 0; i < numMoves; i++) {
+        for (let i = 0; i < numMoves; i++) {
             // avoid duplicate moves
             let newMove;
             do {
@@ -411,6 +415,9 @@
     /**
      * Checks the status of the return code given by an Ajax call. It will throw
      * an error if this response is not in the inclusive range of 200-299.
+     * 
+     * @param {string} response the response returned by the server.
+     * @return {string} some text idk fix jslint
      */
     function checkStatus(response) {
         if (response.status >= 200 && response.status < 300) {
