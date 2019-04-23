@@ -187,7 +187,7 @@
         document.getElementById("get").addEventListener("click", function() {
             let username = document.getElementById("usernametext").value;
             console.log(username);
-            fetch("http://localhost:3000/?username=" + username.trim())
+            fetch("http://localhost:process.env.PORT/?username=" + username.trim())
                 .then(checkStatus)
                 .then(function(responseText) {
                     console.log(responseText);
@@ -217,7 +217,7 @@
                 body : JSON.stringify(data)
             };
             console.log(fetchOptions['body']);
-            fetch("http://localhost:3000", fetchOptions)
+            fetch("http://localhost:process.env.PORT", fetchOptions)
                 .then(checkStatus)
                 .then(function(responseText) {
                     console.log(responseText);
