@@ -9,7 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "timer_service.js"
+    "start": "node timer_service.js"
   },
   "repository": {
     "type": "git",
