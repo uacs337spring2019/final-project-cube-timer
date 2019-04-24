@@ -190,8 +190,8 @@
             fetch("https://final-project-space-cowboyz.herokuapp.com/?username=" + username.trim())
                 .then(checkStatus)
                 .then(function(responseText) {
-                    console.log(responseText);
                     let newSolves = JSON.parse(responseText);
+                    console.log(responseText);
                     for (let i = 0; i < newSolves.length; i++) {
                         if (typeof parseInt(newSolves[i]._time._ms) === "number") {
                             addSolveRecord(new SolveRecord(newSolves[i]._time._ms, 
