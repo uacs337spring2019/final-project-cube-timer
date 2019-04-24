@@ -187,7 +187,7 @@
         document.getElementById("get").addEventListener("click", function() {
             let username = document.getElementById("usernametext").value;
             console.log(username);
-            fetch("http://localhost:process.env.PORT/?username=" + username.trim())
+            fetch("https://final-project-space-cowboyz.herokuapp.com/?username=" + username.trim())
                 .then(checkStatus)
                 .then(function(responseText) {
                     console.log(responseText);
@@ -217,7 +217,7 @@
                 body : JSON.stringify(data)
             };
             console.log(fetchOptions['body']);
-            fetch("http://localhost:process.env.PORT", fetchOptions)
+            fetch("https://final-project-space-cowboyz.herokuapp.com/", fetchOptions)
                 .then(checkStatus)
                 .then(function(responseText) {
                     console.log(responseText);
