@@ -9,7 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"error no test specified\""
+    "start": "timer_service.js"
   },
   "repository": {
     "type": "git",
